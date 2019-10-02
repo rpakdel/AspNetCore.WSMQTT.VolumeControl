@@ -9,4 +9,4 @@ Asp.NET Core Worker Service running as a Windows Service to subscribe to MQTT me
 
 https://github.com/rpakdel/esp8266_rotaryencoder_mqtt is an example of MQTT client that publishes messages when a rotary encoder is turned.
 
-
+[Video of it in action](https://imgur.com/a/iGhdT6T)
