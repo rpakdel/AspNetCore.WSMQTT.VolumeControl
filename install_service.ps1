@@ -1,9 +1,17 @@
-sc.exe delete "AspNetCore.WSMQTT.VolumeControl"
+$ServiceName = "AspNetCore.WSMQTT.VolumeControl"
+$UserName = "GOLD\VolumeControl"
+$BinDir = "C:\Users\User\Qsync\git\AspNetCore.WSMQTT\bin\Release\netcoreapp3.0"
+$Exe = "C:\Users\User\Qsync\git\AspNetCore.WSMQTT\bin\Release\netcoreapp3.0\AspNetCore.WSMQTT.exe"
 
-$acl = Get-Acl "C:\Users\User\Qsync\git\AspNetCore.WSMQTT\bin\Release\netcoreapp3.0"
-$aclRuleArgs = {GOLD\VolumeControl}, "Read,Write,ReadAndExecute", "ContainerInherit,ObjectInherit", "None", "Allow"
+Stop-Service -Name $ServiceName
+sc.exe delete $ServiceName
+
+$acl = Get-Acl $BinDir
+$aclRuleArgs = $UserName, "Read,Write,ReadAndExecute", "ContainerInherit,ObjectInherit", "None", "Allow"
 $accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule($aclRuleArgs)
 $acl.SetAccessRule($accessRule)
-$acl | Set-Acl "C:\Users\User\Qsync\git\AspNetCore.WSMQTT\bin\Release\netcoreapp3.0"
+$acl | Set-Acl $BinDir
 
-New-Service -Name AspNetCore.WSMQTT.VolumeControl -BinaryPathName C:\Users\User\Qsync\git\AspNetCore.WSMQTT\bin\Release\netcoreapp3.0\AspNetCore.WSMQTT.exe -Credential GOLD\VolumeControl -Description "ASP.NET Core MQTT Volume Control" -DisplayName "AspNetCore.WSMQTT.VolumeControl" -StartupType Automatic
+New-Service -Name $ServiceName -BinaryPathName $Exe -Credential $UserName -Description "ASP.NET Core MQTT Volume Control" -DisplayName $ServiceName -StartupType Automatic
+Start-Service -Name $ServiceName
+Get-Service -Name $ServiceName
